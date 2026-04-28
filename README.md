@@ -114,12 +114,6 @@ npm run dev
 
 ---
 
-## 📸 Screenshots
-
-(Add your project screenshots here)
-
----
-
 ## 🌐 Live Demo
 
-(Add deployed link here)
+https://sculptcv.onrender.com/
