@@ -60,45 +60,39 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 4000;
 
-// Fix __dirname for ES modules
+// __dirname fix
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 // ================= MIDDLEWARE =================
-app.use(
-  cors({
-    origin: "*", // production-safe for now
-    credentials: true,
-  }),
-);
-
+app.use(cors({ origin: "*", credentials: true }));
 app.use(express.json());
 
 // ================= ROUTES =================
 app.use("/api/auth", userRoutes);
 app.use("/api/resume", resumeRoutes);
 
-// Static uploads
+// uploads
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
-// API test route
+// API test
 app.get("/api", (req, res) => {
   res.send("API is running");
 });
 
-// ================= SERVE FRONTEND (VITE) =================
-// IMPORTANT: backend folder → frontend is outside it
-app.use(express.static(path.join(__dirname, "../frontend/dist")));
+// ================= FRONTEND (VITE) =================
+const clientPath = path.resolve(__dirname, "../frontend/dist");
 
-// SPA fallback (React Router fix)
+app.use(express.static(clientPath));
+
 app.get("*", (req, res) => {
-  res.sendFile(path.resolve(__dirname, "../frontend/dist/index.html"));
+  res.sendFile(path.join(clientPath, "index.html"));
 });
 
 // ================= DB =================
 connectDB();
 
-// ================= START SERVER =================
+// ================= START =================
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
